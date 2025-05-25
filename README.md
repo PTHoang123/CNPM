@@ -152,7 +152,7 @@ DB_PASSWORD=your_secure_password
 
 1. Update the frontend environment file (`.env`):
 ```env
-REACT_APP_API_URL=http://192.168.1.8:5000
+REACT_APP_API_URL=http://{your_ip_address}:5000
 ```
 
 2. Build the frontend:
@@ -190,7 +190,7 @@ sudo nano /etc/nginx/sites-available/food-delivery
 ```nginx
 server {
     listen 80;
-    server_name 192.168.1.8;  # Your IP address
+    server_name your_ip_address;  # Your IP address
 
     # Frontend
     location / {
@@ -236,12 +236,12 @@ sudo ufw allow 5432  # PostgreSQL (if needed)
 
 1. Frontend should be accessible at:
    ```
-   http://192.168.1.8
+   http://{your_ip_address}
    ```
 
 2. Backend API should be accessible at:
    ```
-   http://192.168.1.8:5000
+   http://{your_ip_address}:5000
    ```
 
 ## Important Notes
@@ -273,7 +273,7 @@ sudo ufw allow 5432  # PostgreSQL (if needed)
    To test from other devices during development:
    ```bash
    # Frontend
-   REACT_APP_API_URL=http://192.168.1.8:5000 npm start
+   REACT_APP_API_URL={your_ip_address}:5000 npm start
 
    # Backend
    cd backend
