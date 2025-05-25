@@ -1,70 +1,281 @@
-# Getting Started with Create React App
+# Food Delivery Application Installation Guide
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This guide provides detailed instructions for setting up both the development environment (for developers) and the running environment (for deployment).
 
-## Available Scripts
+## Development Environment Setup (Host)
 
-In the project directory, you can run:
+### Prerequisites
+- Node.js (v16.x or higher)
+- npm (v8.x or higher)
+- Git
+- PostgreSQL (v14.x or higher)
 
-### `npm start`
+### Step 1: Clone the Repository
+```bash
+git clone https://github.com/PTHoang123/CNPM.git
+cd food-delivery
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Step 2: Frontend Setup
+1. Install dependencies:
+```bash
+npm install
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+2. Create a `.env` file in the root directory:
+```env
+REACT_APP_API_URL=http://localhost:5000
+```
 
-### `npm test`
+3. Start the development server:
+```bash
+npm start
+```
+The frontend will be available at `http://localhost:3000`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Step 3: Backend Setup
+1. Navigate to the backend directory:
+```bash
+cd backend
+```
 
-### `npm run build`
+2. Install backend dependencies:
+```bash
+npm install
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+3. Create a `.env` file in the backend directory:
+```env
+PORT=5000
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=food_delivery
+DB_USER=your_username
+DB_PASSWORD=your_password
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+4. Set up the database:
+```bash
+# Create the database
+psql -U postgres
+CREATE DATABASE food_delivery;
+\q
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# Run migrations (if using migrations)
+npm run migrate
+```
 
-### `npm run eject`
+5. Start the backend server:
+```bash
+npm run dev
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Development Tools
+- VS Code Extensions:
+- ESLint
+- Prettier
+- React Developer Tools
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Running Environment Setup (Target)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Prerequisites
+- Node.js (v16.x or higher)
+- PostgreSQL (v14.x or higher)
+- PM2 (for process management)
+- Nginx (for reverse proxy)
 
-## Learn More
+### Step 1: System Preparation
+```bash
+# Update system packages
+sudo apt update
+sudo apt upgrade
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+# Install Node.js and npm
+curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+sudo apt install -y nodejs
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+# Install PM2 globally
+sudo npm install -g pm2
 
-### Code Splitting
+# Install Nginx
+sudo apt install nginx
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### Step 2: Database Setup
+```bash
+# Install PostgreSQL
+sudo apt install postgresql postgresql-contrib
 
-### Analyzing the Bundle Size
+# Create database and user
+sudo -u postgres psql
+CREATE DATABASE food_delivery;
+CREATE USER food_delivery_user WITH PASSWORD 'your_secure_password';
+GRANT ALL PRIVILEGES ON DATABASE food_delivery TO food_delivery_user;
+\q
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### Step 3: Application Deployment
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/food-delivery.git
+cd food-delivery
+```
 
-### Making a Progressive Web App
+2. Frontend build:
+```bash
+# Install dependencies
+npm install
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+# Create production build
+npm run build
+```
 
-### Advanced Configuration
+3. Backend setup:
+```bash
+cd backend
+npm install
+```
+4. Environment Configuration:
+Create `/etc/food-delivery/.env`:
+```env
+NODE_ENV=production
+PORT=5000
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=food_delivery
+DB_USER=food_delivery_user
+DB_PASSWORD=your_secure_password
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## 5. Frontend Configuration
 
-### Deployment
+1. Update the frontend environment file (`.env`):
+```env
+REACT_APP_API_URL=http://192.168.1.8:5000
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+2. Build the frontend:
+```bash
+npm run build
+```
 
-### `npm run build` fails to minify
+## 6. Backend Configuration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+1. Update the backend environment file (`backend/.env`):
+```env
+NODE_ENV=production
+PORT=5000
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=food_delivery
+DB_USER=food_delivery_user
+DB_PASSWORD=your_secure_password
+```
+
+2. Start the backend with PM2:
+```bash
+cd backend
+pm2 start npm --name "food-delivery-api" -- start
+```
+
+## 7. Nginx Configuration
+
+1. Create Nginx configuration file:
+```bash
+sudo nano /etc/nginx/sites-available/food-delivery
+```
+
+2. Add the following configuration:
+```nginx
+server {
+    listen 80;
+    server_name 192.168.1.8;  # Your IP address
+
+    # Frontend
+    location / {
+        root /path/to/food-delivery/build;
+        index index.html;
+        try_files $uri $uri/ /index.html;
+    }
+
+    # Backend API
+    location /api {
+        proxy_pass http://localhost:5000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    # Enable CORS
+    add_header 'Access-Control-Allow-Origin' '*';
+    add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, PUT, DELETE';
+    add_header 'Access-Control-Allow-Headers' 'X-Requested-With,Content-Type,Authorization';
+}
+```
+
+3. Enable the configuration:
+```bash
+sudo ln -s /etc/nginx/sites-available/food-delivery /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl restart nginx
+```
+
+## 8. Firewall Configuration (if enabled)
+
+Allow necessary ports:
+```bash
+sudo ufw allow 80    # HTTP
+sudo ufw allow 5000  # Backend API
+sudo ufw allow 5432  # PostgreSQL (if needed)
+```
+
+## 9. Testing the Deployment
+
+1. Frontend should be accessible at:
+   ```
+   http://192.168.1.8
+   ```
+
+2. Backend API should be accessible at:
+   ```
+   http://192.168.1.8:5000
+   ```
+
+## Important Notes
+
+1. **Local Network Access**:
+   - This setup will only work within your local network
+   - Other devices in the same network can access using your IP
+   - For external access, you'll need:
+    - Public IP address
+    - Port forwarding on your router
+    - Or a domain name with DNS configuration
+
+2. **Security Considerations**:
+   - IP-based access is less secure than domain-based
+   - Consider implementing:
+     - Strong authentication
+     - Rate limiting
+     - IP whitelisting
+     - HTTPS (even for local network)
+
+3. **IP Address Changes**:
+   - If your router assigns IP dynamically, the address might change
+   - Consider:
+     - Setting a static IP in your router
+     - Using local DNS
+     - Or using hostname instead of IP
+
+4. **Development Testing**:
+   To test from other devices during development:
+   ```bash
+   # Frontend
+   REACT_APP_API_URL=http://192.168.1.8:5000 npm start
+
+   # Backend
+   cd backend
+   PORT=5000 npm run dev
+   ```
